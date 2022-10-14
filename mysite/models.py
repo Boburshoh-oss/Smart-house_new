@@ -22,7 +22,14 @@ class Channel(models.Model):
     description = models.TextField(max_length=200,blank=True,null=True)
     device = models.ForeignKey('mysite.Device',on_delete=models.CASCADE,null=True,related_name="channels")
     topic_name = models.CharField(max_length=200,unique=True,blank=True,null=True)
-    state = models.BooleanField(default=False)
+    state = models.CharField(
+        max_length=100,
+        choices=[
+            ("on", "ON"),
+            ("off", "OFF"),
+        ],
+        default="off",
+    )
     
     created_at = models.DateTimeField(auto_now_add=True)
 

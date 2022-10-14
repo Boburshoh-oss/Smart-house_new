@@ -3,14 +3,22 @@ from django.shortcuts import render
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-from asyncio.log import logger
 from rest_framework import generics
 from rest_framework import viewsets
 from .serializers import ChannelSerializer,DevicePutSerializer,DeviceSerializer,HomeSerializer,ProductSerializer,SensorSerializer
 from .models import Channel, Device, Sensor, Product, Home
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 # Create your views here.
+
 def index(request):
+    return render(request, 'chat/index.html')
+
+
+def room(request, room_name):
+    return render(request, 'chat/room.html', {
+        'room_name': room_name
+    })
+def index1(request):
     channel_layer = get_channel_layer()
     # async_to_sync(channel_layer.group_send)("my.group", {"type": "my.custom.message", "text":"1"})
     # async_to_sync(channel_layer.group_send)("my.group", {"type": "my.custom.message", "text":"2"})

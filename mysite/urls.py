@@ -1,13 +1,14 @@
 from django.urls import path,include
-from .views import index
+from .views import index,room
 from rest_framework import routers
 from .views import *
 router = routers.DefaultRouter()
 
 router.register('product', ProductViewSet)
 urlpatterns = [
-    path('index',index),
-    path('', include(router.urls)),
+    path('', index, name='index'),
+    path('chat/<str:room_name>/', room, name='room'),
+    path('product', include(router.urls)),
     path('home/', HomeListCreateAPIView.as_view()),
     path('home/<int:pk>/', HomeDetailAPIView.as_view()),
     path('channel/', ChannelListCreateAPIView.as_view()),

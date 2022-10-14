@@ -54,16 +54,12 @@ class ChannelSerializer(serializers.ModelSerializer):
         my_request = validated_data.get('state', None)
         my_topic = validated_data.get('topic_name', instance.topic_name)
 
-        if my_request is True:
-            message = 'on'
-        elif my_request is False:
-            message = 'off'
-
         channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)("my.group", {"type": "publish.results", "text":message,'topic':my_topic})
+        async_to_sync(channel_layer.group_send)("my.group", {"type": "publish.results", "text":my_request,'topic':my_topic})
+        async_to_sync(channel_layer.group_send)("my.group", {"type": "my.custom.message", "text":my_topic})
 
-        instance.state = validated_data.get('state', instance.state)
-        instance.save()
+        # instance.state = validated_data.get('state', instance.state)
+        # instance.save()
         return instance
 
     def create(self, validated_data):
