@@ -2,10 +2,10 @@ version: '3.4'
 services:
   web:
     build: .
-    command:  sh -c "wait-for db:5432 && python manage.py makemigrations  && python manage.py migrate && gunicorn config.wsgi -b 0.0.0.0:8000"
+    command:  sh -c "wait-for db:5432 && python manage.py makemigrations  && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     container_name: web
     ports:
-      - "8000"
+      - "8000:8000"
     depends_on:
       - redis
       - db
@@ -72,8 +72,8 @@ services:
       - redis
     environment:
       - DEBUG=1
-      - CELERY_BROKER="redis://password@redis:6379/0"
-      - CELERY_BACKEND="redis://password@redis:6379/0"
+      - CELERY_BROKER=redis://:password@redis:6379/0
+      - CELERY_BACKEND=redis://:password@redis:6379/0
     ports:
       - 5555:5555
 volumes:

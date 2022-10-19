@@ -83,7 +83,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('redis://password@redis:6379/1')]
+            'hosts': [('redis://:password@redis:6379/1')]
         },
     },
 }
@@ -149,7 +149,7 @@ CELERY_TASK_TRACK_STARTED = True
 # CELERY_ACCEPT_CONTENT = ['application/json']
 # CELERY_TASK_SERIALIZER = 'json'
 # CELERY_RESULT_SERIALIZER = 'json'
-CELERY_BROKER_URL = "redis://password@redis:6379/0"
+CELERY_BROKER_URL = "redis://:password@redis:6379/0"
 CELERY_RESULT_BACKEND = "django-db"
 
 # Static files (CSS, JavaScript, Images)    

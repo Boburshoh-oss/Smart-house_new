@@ -7,8 +7,11 @@ RUN apk update && apk add --virtual .build-deps gcc python3-dev musl-dev postgre
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . .
+RUN chmod -R 777 /bin
 RUN mv wait-for /bin/wait-for
+RUN chmod -R 777 /bin/wait-for
 
+RUN pip install --upgrade pip
 RUN pip install  -r requirements.txt
 
 # Remove dependencies only required for psycopg2 build
