@@ -1,7 +1,9 @@
-from django.urls import path,include
-from .views import index,room
+from django.urls import include, path
 from rest_framework import routers
+
 from .views import *
+from .views import index, room
+
 router = routers.DefaultRouter()
 
 router.register('product', ProductViewSet)

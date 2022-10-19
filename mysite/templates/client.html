@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'client.css'">
+    <title>SimSim Camera</title>
+</head>
+<body>
+    <header>
+		<h1>SimSim Camera</h1>
+	</header>
+    
+    <div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="#" onclick="show_hide_simsim()">SimSim</a>
+		<a href="#" onclick="show_hide_wifi()">Settings</a>
+		<a href="#" onclick="show_hide_ota()">Logout</a>
+	</div>
+
+    <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
+
+	<div id="Simsim_co" onclick="show_hide_simsim">
+		<h1>SimSim company</h1>
+		<h3>SimSim offers a suite of IoT products and solutions, including smart home solutions, industrial sensors and connectivity management and automation. For example, these products can be used to increase manufacturing uptime, develop a smarter security grid and connect city infrastructure.</h3>
+		<div id="content-left">
+            <center>
+            <div id="stream-container" class="image-container"> 
+                <img id="stream" src=""> 
+            </div>
+            </center>
+        </div>
+        <center>
+            <button class="openbtn" onclick="sendMessage()">Open the door</button>
+        </center>
+        <hr>
+        <h2>Meet our Team</h2>
+		<h3>Fayzullaev Alisher – Project Manager, Embedded Systems Engineer </h3>
+		<h3>Botirov Boburbek – Back-End Developer </h3>
+		<h2>Mission</h2>
+		<h3>Our goal is to provide our customers with the best SMART IOT DEVICES at the best possible market price without compromising quality</h3>
+	</div>
+    
+
+    
+
+    <script src="{% static 'script.js'%}"></script>
+    
+</body>
+</html>

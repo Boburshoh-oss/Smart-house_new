@@ -1,0 +1,83 @@
+version: '3.4'
+services:
+  web:
+    build: .
+    command:  sh -c "wait-for db:5432 && python manage.py makemigrations  && python manage.py migrate && gunicorn config.wsgi -b 0.0.0.0:8000"
+    container_name: web
+    ports:
+      - "8000"
+    depends_on:
+      - redis
+      - db
+        
+    restart: on-failure
+    volumes: 
+      - .:/usr/src/app
+    hostname: web
+    image: web-image
+
+  db:
+    image: postgres:12.12
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  redis:
+    image: redis:6.2-alpine
+    command: redis-server --requirepass password
+    ports:
+      - 6379:6379
+    restart: always
+    volumes:
+      - redisdata:/data
+  
+  celery_worker:
+    build: .
+    command: sh -c "wait-for web:8000 -- celery -A config worker -l info"
+    depends_on:
+      - web
+      - redis
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      
+    image: web-image
+    restart: on-failure
+
+  mosquitto:
+    image: eclipse-mosquitto
+    command: mqttasgi config.asgi:application
+    
+    environment:
+      - MQTT_HOSTNAME=0.0.0.0
+      - MQTT_PORT=1883
+      - MQTT_USERNAME=Boburshoh
+      - MQTT_PASSWORD=123
+    ports:
+      - 1883:1883
+      - 9001:9001
+  
+  flower:
+    build: .
+    command: celery -A config flower
+    depends_on:
+      - web
+      - celery_worker
+      - redis
+    environment:
+      - DEBUG=1
+      - CELERY_BROKER="redis://password@redis:6379/0"
+      - CELERY_BACKEND="redis://password@redis:6379/0"
+    ports:
+      - 5555:5555
+volumes:
+  redisdata:
+  pgdata:
+  psqldata:
+    

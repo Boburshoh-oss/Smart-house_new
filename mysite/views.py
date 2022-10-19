@@ -1,18 +1,22 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.http import HttpResponse
 from django.shortcuts import render
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-
-from rest_framework import generics
-from rest_framework import viewsets
-from .serializers import ChannelSerializer,DevicePutSerializer,DeviceSerializer,HomeSerializer,ProductSerializer,SensorSerializer
-from .models import Channel, Device, Sensor, Product, Home
+from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from .models import Channel, Device, Home, Product, Sensor
+from .serializers import (ChannelSerializer, DevicePutSerializer,
+                          DeviceSerializer, HomeSerializer, ProductSerializer,
+                          SensorSerializer)
+
 # Create your views here.
 
 def index(request):
     return render(request, 'chat/index.html')
 
+def index_client(request):
+    return render(request, 'client.html')
 
 def room(request, room_name):
     return render(request, 'chat/room.html', {
@@ -25,7 +29,7 @@ def index1(request):
     # async_to_sync(channel_layer.group_send)("my.group", {"type": "my.custom.message", "text":"3"})
     # async_to_sync(channel_layer.group_send)("my.group", {"type": "my.custom.message", "text":"4"})
     # async_to_sync(channel_layer.group_send)("my.group", {"type": "my.custom.message", "text":"5"})
-    async_to_sync(channel_layer.group_send)("my.group", {"type": "publish.results", "text":"6",'topic':'Myhome9b054ad1-4f70-4439-bcd1-43df034a74a71/mydevice/lamp11'})
+    async_to_sync(channel_layer.group_send)("my.group", {"type": "publish.results", "text":"6",'topic':'Myhome9b054ad1-4f70-4439-bcd1-43df034a74a71/mydevice/lamp11'}) # type: ignore
     
     return HttpResponse('hello world')
 

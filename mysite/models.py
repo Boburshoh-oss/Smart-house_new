@@ -1,5 +1,6 @@
-from django.db import models
 from uuid import uuid4
+
+from django.db import models
 
 # Create your models here.
 
@@ -38,7 +39,7 @@ class Channel(models.Model):
         return self.name
     
     def save(self,*args, **kwargs):
-        self.topic_name = f"{self.device.home}{self.device.home.key}/{self.device}/{self.name}"
+        self.topic_name = f"{self.device.home}{self.device.home.key}/{self.device}/{self.name}"  # type: ignore
         return super().save()
     
     class Meta:
@@ -108,7 +109,7 @@ class Sensor(models.Model):
 
     
     def save(self,*args, **kwargs):
-        self.topic_name = f"{self.device.home}{self.device.home.key}/{self.device}/{self.name}"
+        self.topic_name = f"{self.device.home}{self.device.home.key}/{self.device}/{self.name}"  # type: ignore
         return super().save()
     
     def __str__(self):
@@ -128,3 +129,42 @@ class Sensor_cache(models.Model):
 
     def __str__(self) -> str:
         return self.state
+
+class SmartCondition(models.Model):
+    owner = models.ForeignKey("account.User",on_delete=models.CASCADE,blank=True,null=True)
+    name = models.CharField(max_length=200)
+    condition = models.ForeignKey("mysite.Condition",on_delete=models.CASCADE)
+    device = models.ForeignKey("mysite.Device",on_delete=models.CASCADE)
+    
+    channel =  models.ManyToManyField("mysite.Channel")
+    
+    status = models.CharField(max_length=3)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
+    
+    
+class Condition(models.Model):
+    timer = models.TimeField(blank=True,null=True)
+    sensor_status = models.ForeignKey('mysite.SensorState',on_delete=models.SET_NULL,blank=True,null=True)
+    
+    def __str__(self):
+        return f"{self.timer} / {self.sensor_status}"
+    
+class SensorState(models.Model):
+    sensor = models.ForeignKey('mysite.Sensor',on_delete=models.CASCADE)
+    above = models.IntegerField()
+    below = models.IntegerField()
+    def __str__(self):
+        return f"{self.above} <{self.sensor}< {self.below}"
+
+
+class Description(models.Model):
+    owner = models.ForeignKey(to='account.User', on_delete=models.CASCADE,blank=True,null=True)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.owner.username}  # type: ignore"

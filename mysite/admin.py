@@ -1,6 +1,9 @@
-from django.contrib import admin
-from .models import Channel, Device, Home, Sensor, Product, Sensor_cache
 from django import forms
+from django.contrib import admin
+
+from .models import (Channel, Condition, Device, Home, Product, Sensor,
+                     Sensor_cache, SmartCondition)
+
 # # Register your models here.
 # admin.site.register(SmartCondition)
 # admin.site.register(SensorState)
@@ -51,3 +54,5 @@ admin.site.register(Sensor)
 admin.site.register(Product)
 admin.site.register(Home)
 admin.site.register(Sensor_cache)
+admin.site.register(SmartCondition)
+admin.site.register(Condition)

@@ -1,8 +1,9 @@
-from asyncio.log import logger
-from rest_framework import serializers
-from .models import Channel, Device, Home, Product, Sensor
-from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from rest_framework import serializers
+
+from .models import Channel, Device, Home, Product, Sensor
+
 
 class SensorSerializer(serializers.ModelSerializer):
     class Meta:
