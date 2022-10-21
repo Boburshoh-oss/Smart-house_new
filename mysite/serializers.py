@@ -1,8 +1,7 @@
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from .models import Channel, Device, Home, Product, Sensor
+from .models import Channel, Device, Home, Product, Sensor, Sensor_cache, SmartCondition, Condition, SensorState, Description
 
 
 class SensorSerializer(serializers.ModelSerializer):
@@ -51,17 +50,6 @@ class ChannelSerializer(serializers.ModelSerializer):
         fields = ['id','owner','name','device','state','created_at','topic_name']
         read_only_fields = ('id', 'created_at','owner')
     
-    def update(self, instance, validated_data):
-        my_request = validated_data.get('state', None)
-        my_topic = validated_data.get('topic_name', instance.topic_name)
-
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)("my.group", {"type": "publish.results", "text":my_request,'topic':my_topic})
-        async_to_sync(channel_layer.group_send)("my.group", {"type": "my.custom.message", "text":my_topic})
-
-        # instance.state = validated_data.get('state', instance.state)
-        # instance.save()
-        return instance
 
     def create(self, validated_data):
         product_abilty = validated_data['device'].product.num_of_channels
@@ -70,3 +58,34 @@ class ChannelSerializer(serializers.ModelSerializer):
         if channels_count < product_abilty:
             return super().create(validated_data)
         raise serializers.ValidationError({"channels maximum count must be":product_abilty})
+
+
+class SensorStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SensorState
+        fields = '__all__'
+
+class Sensor_cacheSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sensor_cache
+        fields = '__all__'
+
+class ConditionSerializer(WritableNestedModelSerializer):
+    timer=serializers.TimeField(format='%H:%M',default=None)  # type: ignore
+    sensor_status = SensorStateSerializer(default=None)
+    class Meta:
+        model = Condition
+        fields = '__all__'
+        
+class SmartConditionSerializer(WritableNestedModelSerializer):
+    condition = ConditionSerializer()
+    class Meta:
+        model = SmartCondition
+        fields = '__all__'
+        read_only_fields = ('id', 'created_at','owner')
+
+class DescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Description
+        fields = '__all__'
+        read_only_fields = ('id', 'created_at','owner')

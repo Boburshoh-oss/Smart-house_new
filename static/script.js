@@ -1,5 +1,8 @@
-const url = `ws://192.168.10.229:9876`
-const client = new WebSocket(url)
+
+const client = new WebSocket('wss://'
++ window.location.host
++ '/ws'
++ '/')
 
 const view = document.getElementById("stream");
 
@@ -13,16 +16,18 @@ function openNav() {
   }
 
 
-client.onmessage = function(event) {
-    const {data} = event
-    if (data instanceof Blob) {
-        var urlObject = URL.createObjectURL(data);
+client.onmessage = function (event) {
+    const { data } = event
+    const frame = JSON.parse(data).message
+    // console.log(frame)
+    if (frame instanceof Blob) {
+        var urlObject = URL.createObjectURL(frame);
         view.src = urlObject;
       }
 }
 
 function sendMessage(){
-    console.log("message is sending")
+    // console.log("message is sending")
     client.send("on")
 
 }

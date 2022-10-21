@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 router.register('product', ProductViewSet)
 urlpatterns = [
     path('', index, name='index'),
+    path('client/',index_client),
     path('chat/<str:room_name>/', room, name='room'),
     path('product', include(router.urls)),
     path('home/', HomeListCreateAPIView.as_view()),
@@ -18,10 +19,11 @@ urlpatterns = [
     path('device/', DeviceListCreateAPIView.as_view()),
     path('device/<int:pk>/', DeviceDetailAPIView.as_view()),
     path('sensor/', SensorListCreateAPIView.as_view()),
+    path('sensor_cache/', SensorCacheListAPIView.as_view()),
     path('sensor/<int:pk>/', SensorDetailAPIView.as_view()),
-    # path('smartconditions/', SmartConditionListCreateApiView.as_view()),
-    # path('smartconditions/<int:pk>/', SmartConditionRetrieveApiView.as_view()),
+    path('smartconditions/', SmartConditionListCreateApiView.as_view()),
+    path('smartconditions/<int:pk>/', SmartConditionRetrieveApiView.as_view()),
     # path('product/', ProductViewSet.as_view()),
     
-    # path('description/',DescriptionListCreateApiView.as_view())
+    path('description/',DescriptionListCreateApiView.as_view())
 ]
