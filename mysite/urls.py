@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 router.register('product', ProductViewSet)
 urlpatterns = [
     path('', index, name='index'),
+    path('publish_test', index1, name='index1'),
     path('client/',index_client),
     path('chat/<str:room_name>/', room, name='room'),
     path('product', include(router.urls)),
