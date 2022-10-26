@@ -7,6 +7,7 @@ router = routers.DefaultRouter()
 router.register('product', ProductViewSet)
 urlpatterns = [
     path('', index, name='index'),
+    path('', index1, name='index1'),
     path('chat/<str:room_name>/', room, name='room'),
     path('product', include(router.urls)),
     path('home/', HomeListCreateAPIView.as_view()),
