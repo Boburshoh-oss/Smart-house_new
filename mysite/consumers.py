@@ -56,7 +56,12 @@ class MyMqttConsumer(MqttConsumer):
         print('subscribe a topic')
         if data not in self.subscribed_topics:
             await self.subscribe(data, 2)
-
+            
+    async def unsubscribe_sensors(self,event):
+        topic = event['topic']
+        print("unsubscribe topic: "+topic)
+        await self.unsubscribe(topic)
+        
     async def disconnect(self):
         await self.unsubscribe('my/testing/topic')
 

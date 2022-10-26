@@ -8,6 +8,7 @@ from config.celery import app
 from mysite.models import Channel
 
 client = mqtt.Client()
+client.username_pw_set(username="bobur",password="bobur")
 
 @app.task() 
 def mqtt_task_scheduale(status,channels,sensor_status=None):
@@ -20,8 +21,5 @@ def mqtt_task_scheduale(status,channels,sensor_status=None):
         print("33333")
         client.publish(topic_name.topic_name,status)
         print("444444")
-        # async_to_sync(channel_layer.group_send)("my.group", {"type": "publish","topic":str('fuck'),"payload":status}) # type: ignore
-    # if sensor_status:
-    #     for sensor in sensor_status:
-    #         async_to_sync(channel_layer.group_send)("my.group", {"type": "publish.results", "text":status,"topic":str(sensor.topic_name)})
+    client.disconnect()
     return {"result":True}

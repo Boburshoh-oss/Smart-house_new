@@ -29,7 +29,7 @@ def request_to_mqtt(sender, instance, created, **kwargs):   # type: ignore
 def unsubscribe_topic(sender, instance, **kwargs):
         my_topic = instance.topic_name
         channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)("my.group", {"type": "unsubscribe", "text":str(my_topic)}) # type: ignore
+        async_to_sync(channel_layer.group_send)("my.group", {"type": "unsubscribe_sensors", "topic":str(my_topic)}) # type: ignore
 
 @receiver(post_save, sender=SmartCondition)
 def create_sm(sender, instance, created, **kwargs):

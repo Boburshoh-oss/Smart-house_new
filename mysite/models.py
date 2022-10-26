@@ -102,7 +102,7 @@ class Sensor(models.Model):
     owner = models.ForeignKey(
         to='account.User', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100)
-    state = models.CharField(max_length=255)
+    state = models.CharField(max_length=255,blank=True, null=True)
     device = models.ForeignKey(
         'mysite.Device', on_delete=models.CASCADE, null=True, related_name="sensors")
     topic_name = models.CharField(
