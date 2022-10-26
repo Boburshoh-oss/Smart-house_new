@@ -12,7 +12,8 @@ from .serializers import (ChannelSerializer, DevicePutSerializer,
                           Sensor_cacheSerializer,DescriptionSerializer)
 
 # Create your views here.
-
+client = mqtt.Client()
+client.username_pw_set(username="bobur",password="bobur")
 
 def index(request):
     return render(request, 'chat/index.html')
@@ -29,6 +30,7 @@ def room(request, room_name):
 
 
 def index1(request):
+    
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)("my.group", {  # type: ignore
         "type": "publish.results", "text": "6", 'topic': 'Myhome9b054ad1-4f70-4439-bcd1-43df034a74a71/mydevice/lamp11'})
