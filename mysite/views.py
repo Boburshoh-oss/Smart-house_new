@@ -32,6 +32,7 @@ def room(request, room_name):
 def index1(request):
     client.connect('localhost',1883,60)
     client.publish("test","working")
+    client.disconnect()
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)("my.group", {  # type: ignore
         "type": "publish.results", "text": "6", 'topic': 'Myhome9b054ad1-4f70-4439-bcd1-43df034a74a71/mydevice/lamp11'})
