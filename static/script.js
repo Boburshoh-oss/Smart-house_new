@@ -1,5 +1,5 @@
 
-const client = new WebSocket('wss://'
+const client = new WebSocket('ws://'
 + window.location.host
 + '/ws'
 + '/')
