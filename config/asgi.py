@@ -8,11 +8,11 @@ https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
 """
 
 import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-django_project = get_asgi_application()
-
+wsgi_app = get_asgi_application()
 
 from channels.routing import ProtocolTypeRouter,URLRouter
 from mysite.consumers import MyMqttConsumer
@@ -21,7 +21,7 @@ import mysite.routing
 
 
 application = ProtocolTypeRouter({
-        'http': django_project,
+        'http': wsgi_app,
         'mqtt': MyMqttConsumer.as_asgi(),  
         "websocket": AuthMiddlewareStack(
             URLRouter(
