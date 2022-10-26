@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-
+import paho.mqtt.client as mqtt
 from .models import Channel, Device, Home, Product, Sensor, SmartCondition, Description, Sensor_cache
 from .serializers import (ChannelSerializer, DevicePutSerializer,
                           DeviceSerializer, HomeSerializer, ProductSerializer,
@@ -30,7 +30,8 @@ def room(request, room_name):
 
 
 def index1(request):
-    
+    client.connect('localhost',1883,60)
+    client.publish("test","working")
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)("my.group", {  # type: ignore
         "type": "publish.results", "text": "6", 'topic': 'Myhome9b054ad1-4f70-4439-bcd1-43df034a74a71/mydevice/lamp11'})
